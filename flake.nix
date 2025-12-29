@@ -35,7 +35,6 @@
       ];
 
       inherit systems;
-      debug = true;
 
       partitionedAttrs = {
         apps = "dev";

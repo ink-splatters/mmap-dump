@@ -1,4 +1,3 @@
-#![doc = include_str!("../README.md")]
 #![forbid(unsafe_op_in_unsafe_fn)]
 #![warn(clippy::pedantic, clippy::nursery)]
 
@@ -93,7 +92,10 @@ const fn initial_chunk_size(remaining: u64, aggressive: bool) -> usize {
         if remaining > usize::MAX as u64 {
             usize::MAX
         } else {
-            remaining as usize
+            // SAFETY: Just verified remaining <= usize::MAX
+            #[allow(clippy::cast_possible_truncation)]
+            let size = remaining as usize;
+            size
         }
     } else {
         DEFAULT_CHUNK_SIZE
@@ -108,7 +110,10 @@ const fn compute_map_len(remaining: u64, chunk_size: usize) -> usize {
     if remaining > chunk_size as u64 {
         chunk_size
     } else {
-        remaining as usize
+        // SAFETY: Just verified remaining <= chunk_size, which is usize
+        #[allow(clippy::cast_possible_truncation)]
+        let len = remaining as usize;
+        len
     }
 }
 
