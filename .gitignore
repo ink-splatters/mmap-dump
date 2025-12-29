@@ -1,1 +1,15 @@
 .DS_Store
+build
+dist
+.env
+/*.binarycookies
+/*.csv
+/*.json
+/*.txt
+
+
+# Added by cargo
+
+/target
+/.direnv
+/.pre-commit-config.yaml
