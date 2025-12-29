@@ -1,3 +1,3 @@
 # mmap-dump
 
-TODO
+Fastest large file dump from unaligned offset
