@@ -1,18 +1,24 @@
 {
   inputs = {
+    advisory-db = {
+      flake = false;
+      url = "github:rustsec/advisory-db";
+    };
     crane.url = "github:ipetkov/crane";
     fenix = {
       url = "github:nix-community/fenix/monthly";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.rust-analyzer-src.follows = "";
     };
+    import-tree.url = "github:vic/import-tree";
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
+
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    systems.url = "github:nix-systems/default";
+    systems.url = "github:ink-splatters/nix-systems"; # no x86_64-darwin
   };
 
   nixConfig = {
@@ -25,47 +31,46 @@
   };
 
   outputs = inputs @ {flake-parts, ...}:
-    flake-parts.lib.mkFlake {inherit inputs;} (let
+    flake-parts.lib.mkFlake {inherit inputs;} ({lib, ...}: let
+      importTree = inputs.import-tree;
       systems = import inputs.systems;
-      flakeModules.default = import ./nix/flake-module.nix;
+      flakeModules.default = import ./nix {inherit importTree;};
     in {
       imports = [
         flakeModules.default
         flake-parts.flakeModules.partitions
       ];
 
-      inherit systems;
-
-      partitionedAttrs = {
-        apps = "dev";
-        checks = "dev";
-        devShells = "dev";
-        formatter = "dev";
-      };
-      partitions.dev = {
-        # directory containing inputs-only flake.nix
-        extraInputsFlake = ./nix/dev;
-        module = {
-          imports = [./nix/dev];
-        };
-      };
-      # this won't be exported
-      perSystem = {
-        config,
-        lib,
-        ...
-      }: {
-        options.src = lib.mkOption {
+      options = {
+        src = lib.mkOption {
+          type = lib.types.path;
           default = builtins.path {
             path = ./.;
             name = "mmap-dump";
           };
         };
-        config.packages.default = config.packages.mmap-dump;
       };
+      config = {
+        inherit systems;
 
-      flake = {
-        inherit flakeModules;
+        partitionedAttrs = {
+          apps = "dev";
+          checks = "dev";
+          devShells = "dev";
+          formatter = "dev";
+        };
+        partitions.dev = let
+          dev = import ./nix/dev {inherit importTree;};
+        in {
+          extraInputsFlake = ./nix/dev;
+          module.imports = [dev];
+        };
+
+        perSystem = {config, ...}: {
+          packages.default = config.packages.mmap-dump;
+        };
+
+        flake = {inherit flakeModules;};
       };
     });
 }

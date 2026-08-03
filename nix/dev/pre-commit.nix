@@ -1,4 +1,7 @@
-{
+{inputs, ...}: {
+  imports = [
+    inputs.git-hooks.flakeModule
+  ];
   perSystem = {
     config,
     pkgs,
@@ -29,29 +32,6 @@
         nil.enable = true;
         alejandra.enable = true;
         statix.enable = true;
-
-        # dockerfile check and formatting
-        dockerfmt-check = {
-          enable = true;
-          name = "Check Dockerfile";
-          description = "Run 'dockerfmt -c'";
-          entry = "dockerfmt -c";
-          types = ["dockerfile"];
-          require_serial = true;
-          pass_filenames = true;
-          extraPackages = [pkgs.dockerfmt];
-        };
-
-        dockerfmt = {
-          enable = true;
-          name = "Format Dockerfile";
-          description = "Run 'dockerfmt -w'";
-          entry = "dockerfmt -w";
-          types = ["dockerfile"];
-          require_serial = true;
-          pass_filenames = true;
-          extraPackages = [pkgs.dockerfmt];
-        };
       };
     };
 
