@@ -16,7 +16,7 @@
           # at shell? or am I missing something?
           inherit (config) checks;
 
-          packages = pre-commit.settings.enabledPackages;
+          packages = [pkgs.zizmor] ++ pre-commit.settings.enabledPackages;
 
           shellHook = ''
             ${pre-commit.installationScript}

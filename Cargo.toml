@@ -2,12 +2,15 @@
 name = "mmap-dump"
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.89"
 
 [dependencies]
-memmap2 = "0.9"
+anstream = "0.6"
+anstyle = "1.0"
 clap = { version = "4.5", features = ["derive"] }
-anyhow = "1.0"
-fs2 = "0.4"
+indicatif = { version = "0.18", default-features = false, features = ["unicode-width"] }
+memmap2 = "0.9"
+thiserror = "2.0"
 
 [dev-dependencies]
 tempfile = "3"
@@ -20,7 +23,6 @@ rust_2024_compatibility = { level = "warn", priority = -1 }
 all = { level = "warn", priority = -1 }
 pedantic = { level = "warn", priority = -1 }
 nursery = { level = "warn", priority = -1 }
-cast_possible_truncation = "allow"  # Handled explicitly
 
 [profile.release]
 codegen-units = 1
