@@ -1,15 +1,16 @@
-name: Check
+name: CI
 
 on:
   push:
     branches:
       - main
   pull_request:
+  workflow_call:
 
 permissions: {}
 
 concurrency:
-  group: check-${{ github.ref }}
+  group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
