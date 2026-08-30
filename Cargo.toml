@@ -2,28 +2,21 @@
 name = "mmap-dump"
 version = "0.2.1"
 edition = "2024"
-rust-version = "1.89"
 
 [dependencies]
 anstream = "1.0.0"
-anstyle = "1.0"
-clap = { version = "4.5", features = ["derive"] }
-indicatif = { version = "0.18", default-features = false, features = ["unicode-width"] }
-memmap2 = "0.9"
-thiserror = "2.0"
+anstyle = "1.0.14"
+clap = { version = "4.6.6", features = ["derive"] }
+indicatif = { version = "0.18.6", default-features = false, features = ["unicode-width"] }
+memmap2 = "0.9.11"
+thiserror = "2.0.20"
 
 [dev-dependencies]
-tempfile = "3"
+tempfile = "3.27.0"
 
-[lints.rust]
-unsafe_op_in_unsafe_fn = "deny"
-rust_2024_compatibility = { level = "warn", priority = -1 }
-
-[lints.clippy]
-all = { level = "warn", priority = -1 }
-pedantic = { level = "warn", priority = -1 }
-nursery = { level = "warn", priority = -1 }
 
 [profile.release]
+lto = "fat"
 codegen-units = 1
-lto = "thin"
+strip = true
+panic = "abort"
