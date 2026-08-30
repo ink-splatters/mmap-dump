@@ -18,6 +18,7 @@
       mmap-dump-native = craneLib.buildPackage (commonArgsNative
         // {
           inherit cargoArtifactsNative;
+          pnameSuffix = "-native";
         });
     };
   };
