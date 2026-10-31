@@ -32,6 +32,7 @@
         nil.enable = true;
         alejandra.enable = true;
         statix.enable = true;
+        zizmor.enable = true;
       };
     };
 
