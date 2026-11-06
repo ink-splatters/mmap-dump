@@ -2,6 +2,7 @@
 name = "mmap-dump"
 version = "0.3.1"
 edition = "2024"
+license = "MIT"
 
 [dependencies]
 anstream = "1.0.0"
